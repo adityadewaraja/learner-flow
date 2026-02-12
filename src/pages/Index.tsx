@@ -1,12 +1,13 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { CourseGrid } from '@/components/CourseGrid';
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">My Learning</h1>
+        <p className="text-sm text-muted-foreground">Lanjutkan kursus yang sedang Anda pelajari.</p>
       </div>
+      <CourseGrid />
     </div>
   );
 };
