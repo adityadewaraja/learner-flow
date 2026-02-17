@@ -14,7 +14,7 @@ export function useEnrollments(statusFilter?: string) {
           course_id,
           progress_percent,
           status,
-          enrolled_at,
+          assigned_at,
           course:courses (
             id,
             title,
@@ -23,7 +23,7 @@ export function useEnrollments(statusFilter?: string) {
             created_at
           )
         `)
-        .order('enrolled_at', { ascending: false });
+        .order('assigned_at', { ascending: false });
 
       if (statusFilter && statusFilter !== 'all') {
         query = query.eq('status', statusFilter);
