@@ -178,6 +178,14 @@ export default function CourseDetail() {
         </CardHeader>
 
         <CardContent>
+          {/* Debug Info */}
+          <div className="mb-4 rounded-md bg-yellow-100 p-3 text-xs font-mono text-yellow-900 space-y-1">
+            <p>🔍 Course ID dari URL: <strong>{id ?? 'undefined'}</strong></p>
+            <p>🔍 Jumlah Soal di-fetch: <strong>{questions.length}</strong></p>
+            <p>🔍 Quiz loading: <strong>{String(quizQuery.isLoading)}</strong></p>
+            <p>🔍 Quiz error: <strong>{quizQuery.error ? String(quizQuery.error) : 'none'}</strong></p>
+          </div>
+
           {/* Unlock button area */}
           {!quizUnlocked && (
             <div className="space-y-4">
