@@ -8,6 +8,7 @@ import { AppLayout } from "@/components/AppLayout";
 import Index from "./pages/Index";
 import Completed from "./pages/Completed";
 import Profile from "./pages/Profile";
+import CourseDetail from "./pages/CourseDetail";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -35,6 +36,14 @@ const App = () => (
               element={
                 <AppLayout>
                   <Completed />
+                </AppLayout>
+              }
+            />
+            <Route
+              path="/course/:id"
+              element={
+                <AppLayout>
+                  <CourseDetail />
                 </AppLayout>
               }
             />

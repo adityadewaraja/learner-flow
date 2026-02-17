@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Enrollment } from '@/types/lms';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -8,12 +9,15 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ enrollment }: CourseCardProps) {
+  const navigate = useNavigate();
   const { course, progress_percent, status } = enrollment;
   const isOverdue = status === 'overdue';
 
   return (
     <div
+      onClick={() => navigate(`/course/${course.id}`)}
       className={cn(
+        'cursor-pointer',
         'group relative overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
         isOverdue
           ? 'border-destructive/60 shadow-[0_0_20px_-5px_hsl(var(--destructive)/0.3)]'
