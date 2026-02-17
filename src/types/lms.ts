@@ -12,6 +12,6 @@ export interface Enrollment {
   course_id: string;
   progress_percent: number;
   status: 'in_progress' | 'completed' | 'overdue';
-  enrolled_at: string;
+  assigned_at: string;
   course: Course;
 }
