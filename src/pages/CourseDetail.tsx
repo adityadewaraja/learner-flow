@@ -177,7 +177,7 @@ export default function CourseDetail() {
           </div>
           <article className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-card-foreground prose-a:text-primary prose-img:rounded-lg">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {course.article_content}
+              {course.article_content.replace(/\\n/g, '\n')}
             </ReactMarkdown>
           </article>
         </div>
