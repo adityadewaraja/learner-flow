@@ -202,18 +202,21 @@ export type Database = {
           id: string
           is_correct: boolean | null
           option_text: string
+          order_index: number | null
           question_id: string
         }
         Insert: {
           id?: string
           is_correct?: boolean | null
           option_text: string
+          order_index?: number | null
           question_id: string
         }
         Update: {
           id?: string
           is_correct?: boolean | null
           option_text?: string
+          order_index?: number | null
           question_id?: string
         }
         Relationships: [
@@ -231,18 +234,21 @@ export type Database = {
           course_id: string
           created_at: string
           id: string
+          order_index: number | null
           question_text: string
         }
         Insert: {
           course_id: string
           created_at?: string
           id?: string
+          order_index?: number | null
           question_text: string
         }
         Update: {
           course_id?: string
           created_at?: string
           id?: string
+          order_index?: number | null
           question_text?: string
         }
         Relationships: [

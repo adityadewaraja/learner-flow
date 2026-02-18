@@ -25,7 +25,8 @@ export function useCourseDetail(courseId: string) {
       const { data: questions, error: qError } = await supabase
         .from('quiz_questions')
         .select('id, course_id, question_text, created_at')
-        .eq('course_id', courseId);
+        .eq('course_id', courseId)
+        .order('order_index', { ascending: true });
 
       if (qError) throw qError;
       if (!questions || questions.length === 0) return [];
