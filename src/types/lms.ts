@@ -4,6 +4,8 @@ export interface Course {
   description: string | null;
   thumbnail_url: string | null;
   video_url: string | null;
+  content_type: string | null;
+  article_content: string | null;
   created_at: string;
 }
 

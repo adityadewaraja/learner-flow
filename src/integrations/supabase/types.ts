@@ -48,6 +48,8 @@ export type Database = {
       }
       courses: {
         Row: {
+          article_content: string | null
+          content_type: string | null
           created_at: string
           created_by: string | null
           description: string | null
@@ -55,9 +57,11 @@ export type Database = {
           id: string
           thumbnail_url: string | null
           title: string
-          video_url: string
+          video_url: string | null
         }
         Insert: {
+          article_content?: string | null
+          content_type?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -65,9 +69,11 @@ export type Database = {
           id?: string
           thumbnail_url?: string | null
           title: string
-          video_url: string
+          video_url?: string | null
         }
         Update: {
+          article_content?: string | null
+          content_type?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -75,7 +81,7 @@ export type Database = {
           id?: string
           thumbnail_url?: string | null
           title?: string
-          video_url?: string
+          video_url?: string | null
         }
         Relationships: [
           {

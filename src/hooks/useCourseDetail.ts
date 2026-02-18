@@ -8,7 +8,7 @@ export function useCourseDetail(courseId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('courses')
-        .select('id, title, description, thumbnail_url, video_url, created_at')
+        .select('id, title, description, thumbnail_url, video_url, content_type, article_content, created_at')
         .eq('id', courseId)
         .maybeSingle();
 
