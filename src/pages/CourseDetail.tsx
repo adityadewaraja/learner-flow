@@ -9,8 +9,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { ArrowLeft, Lock, CheckCircle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, Loader2, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 function getYouTubeEmbedUrl(url: string): string | null {
   try {
@@ -136,7 +138,8 @@ export default function CourseDetail() {
     );
   }
 
-  const embedUrl = course.video_url ? getYouTubeEmbedUrl(course.video_url) : null;
+  const isArticle = course.content_type === 'article';
+  const embedUrl = !isArticle && course.video_url ? getYouTubeEmbedUrl(course.video_url) : null;
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -150,7 +153,7 @@ export default function CourseDetail() {
         </h1>
       </div>
 
-      {/* Video Player */}
+      {/* Video Player (only for video type) */}
       {embedUrl && (
         <div className="overflow-hidden rounded-xl border border-border/40 bg-card">
           <div className="aspect-video w-full">
@@ -162,6 +165,21 @@ export default function CourseDetail() {
               allowFullScreen
             />
           </div>
+        </div>
+      )}
+
+      {/* Article Content (only for article type) */}
+      {isArticle && course.article_content && (
+        <div className="rounded-xl border border-border/40 bg-card p-6 md:p-8">
+          <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <BookOpen className="h-4 w-4" />
+            Materi Bacaan
+          </div>
+          <article className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-card-foreground prose-a:text-primary prose-img:rounded-lg">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {course.article_content}
+            </ReactMarkdown>
+          </article>
         </div>
       )}
 
@@ -195,7 +213,9 @@ export default function CourseDetail() {
           {!quizUnlocked && (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Tonton video terlebih dahulu sebelum mengerjakan quiz.
+                {isArticle
+                  ? 'Baca materi di atas terlebih dahulu sebelum mengerjakan quiz.'
+                  : 'Tonton video terlebih dahulu sebelum mengerjakan quiz.'}
               </p>
               <Button
                 onClick={() => setQuizUnlocked(true)}
@@ -203,8 +223,8 @@ export default function CourseDetail() {
                 className="w-full sm:w-auto"
               >
                 {timer > 0
-                  ? `Tunggu ${timer} detik...`
-                  : "I'm done watching, Start Quiz"}
+                  ? `${isArticle ? 'Minimum reading time' : 'Tunggu'} ${timer} detik...`
+                  : "I'm done, Start Quiz"}
               </Button>
             </div>
           )}
