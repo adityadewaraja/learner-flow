@@ -70,17 +70,28 @@ export default function CourseDetail() {
       });
 
       const score = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
+      const passed = score >= 70;
 
-      // Save quiz attempt
+      // Step 1: Find enrollment_id
+      const { data: enrollment, error: findError } = await supabase
+        .from('enrollments')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('course_id', id)
+        .maybeSingle();
+
+      if (findError) throw findError;
+      if (!enrollment) throw new Error('Enrollment tidak ditemukan');
+
+      // Step 2: Save quiz attempt
       const { error: attemptError } = await supabase.from('quiz_attempts').insert({
-        user_id: user.id,
-        course_id: id,
+        enrollment_id: enrollment.id,
         score,
-        total_questions: questions.length,
+        passed,
       });
       if (attemptError) throw attemptError;
 
-      // Update enrollment
+      // Step 3: Update enrollment status
       const { error: enrollError } = await supabase
         .from('enrollments')
         .update({
@@ -88,10 +99,10 @@ export default function CourseDetail() {
           progress_percent: 100,
           completed_at: new Date().toISOString(),
         })
-        .eq('user_id', user.id)
-        .eq('course_id', id);
+        .eq('id', enrollment.id);
       if (enrollError) throw enrollError;
 
+      // Step 4: UI feedback
       setResultModal({ score, total: questions.length });
     } catch (err) {
       console.error('Quiz submission error:', err);
