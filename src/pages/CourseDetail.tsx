@@ -175,7 +175,7 @@ export default function CourseDetail() {
             <BookOpen className="h-4 w-4" />
             Materi Bacaan
           </div>
-          <article className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-card-foreground prose-a:text-primary prose-img:rounded-lg">
+          <article className="prose prose-sm max-w-none prose-invert prose-headings:text-foreground prose-p:text-card-foreground prose-strong:text-foreground prose-a:text-primary prose-img:rounded-lg prose-li:text-card-foreground">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {course.article_content.replace(/\\n/g, '\n')}
             </ReactMarkdown>
