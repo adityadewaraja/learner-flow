@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { QuizManager } from './QuizManager';
+import { MarkdownEditor } from './MarkdownEditor';
 
 interface Props {
   open: boolean;
@@ -193,7 +194,10 @@ function CourseFields({ form, setField, saving, onSave }: {
       {form.content_type === 'article' && (
         <div className="space-y-2">
           <Label>Article Content (Markdown)</Label>
-          <Textarea value={form.article_content} onChange={(e) => setField('article_content', e.target.value)} placeholder="Tulis artikel dalam format Markdown..." rows={10} className="font-mono text-xs" />
+          <MarkdownEditor
+            value={form.article_content}
+            onChange={(val) => setField('article_content', val)}
+          />
         </div>
       )}
 
