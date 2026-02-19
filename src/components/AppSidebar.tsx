@@ -1,6 +1,7 @@
-import { BookOpen, CheckCircle, User, LogOut } from 'lucide-react';
+import { BookOpen, CheckCircle, User, LogOut, Shield } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -22,6 +23,7 @@ const menuItems = [
 
 export function AppSidebar() {
   const { user, signOut } = useAuth();
+  const { data: profile } = useProfile();
 
   return (
     <Sidebar className="border-r border-border/40">
@@ -52,6 +54,20 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {profile?.role === 'admin' && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink
+                      to="/admin"
+                      className="hover:bg-accent/50"
+                      activeClassName="bg-accent text-accent-foreground font-medium"
+                    >
+                      <Shield className="mr-2 h-4 w-4" />
+                      <span>Admin Panel</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
