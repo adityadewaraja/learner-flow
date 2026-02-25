@@ -189,7 +189,7 @@ export default function CourseDetail() {
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             Deskripsi
           </h2>
-          <p className="text-sm leading-relaxed text-card-foreground">{course.description}</p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-card-foreground">{course.description}</p>
         </div>
       )}
 
