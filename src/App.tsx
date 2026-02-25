@@ -13,6 +13,8 @@ import CourseDetail from "./pages/CourseDetail";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import ManageCourses from "./pages/admin/ManageCourses";
+import UserManagement from "./pages/admin/UserManagement";
+import Reports from "./pages/admin/Reports";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +64,15 @@ const App = () => (
               path="/admin"
               element={
                 <AdminLayout>
-                  <ManageCourses />
+                  <Reports />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/reports"
+              element={
+                <AdminLayout>
+                  <Reports />
                 </AdminLayout>
               }
             />
@@ -71,6 +81,14 @@ const App = () => (
               element={
                 <AdminLayout>
                   <ManageCourses />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <AdminLayout>
+                  <UserManagement />
                 </AdminLayout>
               }
             />
