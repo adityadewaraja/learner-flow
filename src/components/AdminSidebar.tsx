@@ -1,4 +1,4 @@
-import { BookOpen, ArrowLeft, LogOut } from 'lucide-react';
+import { BookOpen, ArrowLeft, LogOut, BarChart3, Users } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,9 @@ import {
 } from '@/components/ui/sidebar';
 
 const menuItems = [
-  { title: 'Manage Courses', url: '/admin/courses', icon: BookOpen },
+  { title: 'Dashboard & Reports', url: '/admin/reports', icon: BarChart3 },
+  { title: 'Course Library', url: '/admin/courses', icon: BookOpen },
+  { title: 'User Management', url: '/admin/users', icon: Users },
 ];
 
 export function AdminSidebar() {
