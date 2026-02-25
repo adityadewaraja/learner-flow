@@ -4,14 +4,16 @@ import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 import { CourseFormDialog } from '@/components/admin/CourseFormDialog';
+import { AssignCourseDialog } from '@/components/admin/AssignCourseDialog';
 
 export default function ManageCourses() {
   const queryClient = useQueryClient();
   const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [assignCourse, setAssignCourse] = useState<{ id: string; title: string } | null>(null);
 
   const coursesQuery = useQuery({
     queryKey: ['admin-courses'],
@@ -84,6 +86,9 @@ export default function ManageCourses() {
                     <TableCell className="capitalize">{c.content_type ?? 'video'}</TableCell>
                     <TableCell>{c.duration_minutes ? `${c.duration_minutes} min` : '-'}</TableCell>
                     <TableCell className="text-right space-x-2">
+                      <Button variant="ghost" size="icon" title="Assign Users" onClick={() => setAssignCourse({ id: c.id, title: c.title })}>
+                        <UserPlus className="h-4 w-4" />
+                      </Button>
                       <Button variant="ghost" size="icon" onClick={() => setEditingCourseId(c.id)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -119,6 +124,16 @@ export default function ManageCourses() {
         onClose={() => setEditingCourseId(null)}
         courseId={editingCourseId}
       />
+
+      {/* Assign Dialog */}
+      {assignCourse && (
+        <AssignCourseDialog
+          open={!!assignCourse}
+          onClose={() => setAssignCourse(null)}
+          courseId={assignCourse.id}
+          courseTitle={assignCourse.title}
+        />
+      )}
     </div>
   );
 }
