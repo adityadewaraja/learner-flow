@@ -12,16 +12,16 @@ import { toast } from 'sonner';
 
 interface QuestionForm {
   question_text: string;
-  options: { option_text: string; is_correct: boolean }[];
+  options: { option_text: string; is_correct: boolean; points: number }[];
 }
 
 const emptyQuestion: QuestionForm = {
   question_text: '',
   options: [
-    { option_text: '', is_correct: true },
-    { option_text: '', is_correct: false },
-    { option_text: '', is_correct: false },
-    { option_text: '', is_correct: false },
+    { option_text: '', is_correct: true, points: 10 },
+    { option_text: '', is_correct: false, points: 0 },
+    { option_text: '', is_correct: false, points: 0 },
+    { option_text: '', is_correct: false, points: 0 },
   ],
 };
 
@@ -46,7 +46,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
       const qIds = questions.map(q => q.id);
       const { data: options, error: oErr } = await supabase
         .from('quiz_options')
-        .select('id, question_id, option_text, is_correct, order_index')
+        .select('id, question_id, option_text, is_correct, order_index, points')
         .in('question_id', qIds)
         .order('order_index');
       if (oErr) throw oErr;
@@ -86,6 +86,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
         option_text: o.option_text,
         is_correct: o.is_correct,
         order_index: idx,
+        points: o.points,
       }));
       const { error: oErr } = await supabase.from('quiz_options').insert(optionsPayload);
       if (oErr) throw oErr;
@@ -144,8 +145,9 @@ export function QuizManager({ courseId }: { courseId: string }) {
               </div>
               <ul className="mt-2 space-y-1">
                 {q.options.map((o: any) => (
-                  <li key={o.id} className={`text-xs px-2 py-1 rounded ${o.is_correct ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground'}`}>
-                    {o.option_text} {o.is_correct && '✓'}
+                  <li key={o.id} className={`text-xs px-2 py-1 rounded flex items-center justify-between ${o.is_correct ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground'}`}>
+                    <span>{o.option_text} {o.is_correct && '✓'}</span>
+                    <span className="text-[10px] ml-2">{o.points ?? 0} pts</span>
                   </li>
                 ))}
               </ul>
@@ -192,6 +194,20 @@ export function QuizManager({ courseId }: { courseId: string }) {
                       }}
                       placeholder={`Opsi ${String.fromCharCode(65 + idx)}`}
                       className="flex-1"
+                    />
+                    <Input
+                      type="number"
+                      value={opt.points}
+                      onChange={(e) => {
+                        const points = parseInt(e.target.value) || 0;
+                        setNewQuestion(prev => ({
+                          ...prev,
+                          options: prev.options.map((o, i) => i === idx ? { ...o, points } : o),
+                        }));
+                      }}
+                      placeholder="Poin"
+                      className="w-20"
+                      min={0}
                     />
                   </div>
                 ))}
