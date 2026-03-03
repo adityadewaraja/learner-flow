@@ -11,8 +11,44 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { ArrowLeft, Lock, CheckCircle, Loader2, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Download } from 'lucide-react';
+
+const PdfPreview = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const title = typeof children === 'string' ? children : 'PDF Document';
+  return (
+    <div className="my-4 rounded-lg border border-border/40 bg-secondary/20 overflow-hidden">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/40">
+        <span className="text-sm font-bold text-foreground truncate">{title}</span>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          download
+          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 shrink-0 no-underline"
+        >
+          <Download className="h-3.5 w-3.5" />
+          Download PDF
+        </a>
+      </div>
+      <iframe
+        src={href}
+        title={title}
+        className="w-full min-h-[600px] border-0"
+      />
+    </div>
+  );
+};
+
+const markdownComponents: Components = {
+  a: ({ href, children, ...props }) => {
+    if (href && href.toLowerCase().endsWith('.pdf')) {
+      return <PdfPreview href={href}>{children}</PdfPreview>;
+    }
+    return <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;
+  },
+};
 
 function getYouTubeEmbedUrl(url: string): string | null {
   try {
@@ -176,7 +212,7 @@ export default function CourseDetail() {
             Materi Bacaan
           </div>
           <article className="prose prose-sm max-w-none prose-invert prose-headings:text-foreground prose-p:text-card-foreground prose-strong:text-foreground prose-a:text-primary prose-img:rounded-lg prose-li:text-card-foreground">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
               {course.article_content.replace(/\\n/g, '\n')}
             </ReactMarkdown>
           </article>
