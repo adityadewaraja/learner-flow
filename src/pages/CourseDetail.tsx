@@ -26,7 +26,7 @@ const PdfPreview = ({ href, children }: { href: string; children: React.ReactNod
           target="_blank"
           rel="noopener noreferrer"
           download
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 shrink-0 no-underline"
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary/80 shrink-0 no-underline"
         >
           <Download className="h-3.5 w-3.5" />
           Download PDF
