@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import ManageCourses from "./pages/admin/ManageCourses";
 import UserManagement from "./pages/admin/UserManagement";
 import Reports from "./pages/admin/Reports";
+import LearnerProgress from "./pages/admin/LearnerProgress";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,14 @@ const App = () => (
               element={
                 <AdminLayout>
                   <UserManagement />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/progress"
+              element={
+                <AdminLayout>
+                  <LearnerProgress />
                 </AdminLayout>
               }
             />

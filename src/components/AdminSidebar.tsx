@@ -1,4 +1,4 @@
-import { BookOpen, ArrowLeft, LogOut, BarChart3, Users } from 'lucide-react';
+import { BookOpen, ArrowLeft, LogOut, BarChart3, Users, TrendingUp } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import {
 
 const menuItems = [
   { title: 'Dashboard & Reports', url: '/admin/reports', icon: BarChart3 },
+  { title: 'Learner Progress', url: '/admin/progress', icon: TrendingUp },
   { title: 'Course Library', url: '/admin/courses', icon: BookOpen },
   { title: 'User Management', url: '/admin/users', icon: Users },
 ];
