@@ -258,8 +258,8 @@ export default function CourseDetail() {
         </div>
       )}
 
-      {/* Mark Material Done Button */}
-      {enrollment && !isCompleted && (
+      {/* Mark Material Done Button - shown for ALL content types */}
+      {enrollment != null && !isCompleted && (
         <div className="rounded-xl border border-border/40 bg-card p-6">
           <Button
             onClick={handleMarkMaterialDone}
