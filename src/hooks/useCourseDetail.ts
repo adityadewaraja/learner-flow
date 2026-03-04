@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { Course, QuizQuestion } from '@/types/lms';
 
-export function useCourseDetail(courseId: string) {
+export function useCourseDetail(courseId: string, userId?: string) {
   const courseQuery = useQuery({
     queryKey: ['course', courseId],
     queryFn: async () => {
@@ -18,10 +18,25 @@ export function useCourseDetail(courseId: string) {
     enabled: !!courseId,
   });
 
+  const enrollmentQuery = useQuery({
+    queryKey: ['enrollment', courseId, userId],
+    queryFn: async () => {
+      if (!userId) return null;
+      const { data, error } = await supabase
+        .from('enrollments')
+        .select('id, status, progress_percent, completed_at')
+        .eq('user_id', userId)
+        .eq('course_id', courseId)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!courseId && !!userId,
+  });
+
   const quizQuery = useQuery({
     queryKey: ['quiz_questions', courseId],
     queryFn: async () => {
-      // Step 1: Fetch questions
       const { data: questions, error: qError } = await supabase
         .from('quiz_questions')
         .select('id, course_id, question_text, created_at')
@@ -31,16 +46,14 @@ export function useCourseDetail(courseId: string) {
       if (qError) throw qError;
       if (!questions || questions.length === 0) return [];
 
-      // Step 2: Fetch options for all questions
       const questionIds = questions.map((q) => q.id);
       const { data: options, error: oError } = await supabase
         .from('quiz_options')
-        .select('id, question_id, option_text, is_correct')
+        .select('id, question_id, option_text, is_correct, points')
         .in('question_id', questionIds);
 
       if (oError) throw oError;
 
-      // Step 3: Merge client-side
       const merged: QuizQuestion[] = questions.map((q) => ({
         id: q.id,
         course_id: q.course_id,
@@ -54,5 +67,5 @@ export function useCourseDetail(courseId: string) {
     enabled: !!courseId,
   });
 
-  return { courseQuery, quizQuery };
+  return { courseQuery, quizQuery, enrollmentQuery };
 }
