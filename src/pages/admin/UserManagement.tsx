@@ -17,7 +17,7 @@ export default function UserManagement() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, department, role, created_at')
+        .select('id, full_name, email, department, role, created_at')
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data;
@@ -43,6 +43,7 @@ export default function UserManagement() {
     const q = search.toLowerCase();
     return (
       (u.full_name ?? '').toLowerCase().includes(q) ||
+      (u.email ?? '').toLowerCase().includes(q) ||
       (u.department ?? '').toLowerCase().includes(q)
     );
   });
@@ -71,7 +72,8 @@ export default function UserManagement() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Department</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Team</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Joined</TableHead>
               </TableRow>
@@ -79,7 +81,7 @@ export default function UserManagement() {
             <TableBody>
               {filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                  <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
                     Tidak ada user ditemukan.
                   </TableCell>
                 </TableRow>
@@ -87,6 +89,7 @@ export default function UserManagement() {
                 filtered.map((u) => (
                   <TableRow key={u.id}>
                     <TableCell className="font-medium">{u.full_name ?? '-'}</TableCell>
+                    <TableCell className="text-muted-foreground">{u.email ?? '-'}</TableCell>
                     <TableCell>{u.department ?? '-'}</TableCell>
                     <TableCell>
                       <Select
