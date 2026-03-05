@@ -67,5 +67,31 @@ export function useCourseDetail(courseId: string, userId?: string) {
     enabled: !!courseId,
   });
 
-  return { courseQuery, quizQuery, enrollmentQuery };
+  const quizAttemptQuery = useQuery({
+    queryKey: ['quiz_attempt', courseId, userId],
+    queryFn: async () => {
+      if (!userId) return null;
+      // First get the enrollment id
+      const { data: enr } = await supabase
+        .from('enrollments')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('course_id', courseId)
+        .maybeSingle();
+      if (!enr) return null;
+
+      const { data, error } = await supabase
+        .from('quiz_attempts')
+        .select('id, score, passed, attempted_at')
+        .eq('enrollment_id', enr.id)
+        .order('attempted_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!courseId && !!userId,
+  });
+
+  return { courseQuery, quizQuery, enrollmentQuery, quizAttemptQuery };
 }

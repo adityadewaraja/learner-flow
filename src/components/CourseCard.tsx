@@ -60,6 +60,13 @@ export function CourseCard({ enrollment }: CourseCardProps) {
           {course.title}
         </h3>
 
+        {/* Quiz Score Badge */}
+        {status === 'completed' && enrollment.quiz_attempts?.[0] && (
+          <Badge className="bg-emerald-600 hover:bg-emerald-700 text-xs">
+            Skor Kuis: {enrollment.quiz_attempts[0].score}%
+          </Badge>
+        )}
+
         {/* Progress */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs text-muted-foreground">

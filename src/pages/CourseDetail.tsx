@@ -10,7 +10,8 @@ import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { ArrowLeft, Lock, CheckCircle, Loader2, BookOpen, Download } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, Loader2, BookOpen, Download, Trophy } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -70,7 +71,7 @@ export default function CourseDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { courseQuery, quizQuery, enrollmentQuery } = useCourseDetail(id ?? '', user?.id);
+  const { courseQuery, quizQuery, enrollmentQuery, quizAttemptQuery } = useCourseDetail(id ?? '', user?.id);
 
   const [quizUnlocked, setQuizUnlocked] = useState(false);
   const [timer, setTimer] = useState(10);
@@ -161,6 +162,7 @@ export default function CourseDetail() {
 
       setResultModal({ score, total: questions.length });
       enrollmentQuery.refetch();
+      quizAttemptQuery.refetch();
     } catch (err) {
       console.error('Quiz submission error:', err);
     } finally {
@@ -283,7 +285,28 @@ export default function CourseDetail() {
       )}
 
       {/* Quiz Section */}
-      {isCompleted ? (
+      {quizAttemptQuery.data ? (
+        /* Quiz Completed Card */
+        <Card className="border-emerald-500/40 bg-emerald-950/20">
+          <CardContent className="flex flex-col items-center gap-4 py-10">
+            <div className="rounded-full bg-emerald-500/20 p-4">
+              <Trophy className="h-10 w-10 text-emerald-400" />
+            </div>
+            <h3 className="text-lg font-bold text-emerald-400">
+              Selamat, Anda telah menyelesaikan kuis ini!
+            </h3>
+            <div className="text-center">
+              <p className="text-5xl font-extrabold text-foreground">{quizAttemptQuery.data.score}%</p>
+              <p className="mt-1 text-sm text-muted-foreground">Skor Anda</p>
+            </div>
+            {quizAttemptQuery.data.passed ? (
+              <Badge className="bg-emerald-600 hover:bg-emerald-700 text-sm px-4 py-1">Lulus</Badge>
+            ) : (
+              <Badge variant="destructive" className="text-sm px-4 py-1">Tidak Lulus</Badge>
+            )}
+          </CardContent>
+        </Card>
+      ) : isCompleted ? (
         <Card className="border-border/40">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">

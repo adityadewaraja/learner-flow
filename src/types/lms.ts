@@ -18,6 +18,7 @@ export interface Enrollment {
   assigned_at: string;
   completed_at: string | null;
   course: Course;
+  quiz_attempts?: { score: number }[];
 }
 
 export interface QuizQuestion {
