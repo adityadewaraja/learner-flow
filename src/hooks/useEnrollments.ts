@@ -21,6 +21,9 @@ export function useEnrollments(statusFilter?: string) {
             description,
             thumbnail_url,
             created_at
+          ),
+          quiz_attempts (
+            score
           )
         `)
         .order('assigned_at', { ascending: false });
